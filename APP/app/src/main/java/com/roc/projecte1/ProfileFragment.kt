@@ -3,7 +3,10 @@ package com.roc.projecte1
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
@@ -11,18 +14,33 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        when (sm.getUserType()) {
-            "a" -> showAlumneContent(view)
-            "p" -> showProfesorContent(view)
-            else -> startActivity(Intent(this.context, StartActivity::class.java))
+
+        val titleTextView = view.findViewById<TextView>(R.id.fragment_profile_title)
+        val editButton = view.findViewById<Button>(R.id.fragment_profile_edit_button)
+        val logoffButton = view.findViewById<Button>(R.id.fragment_profile_logoff_button)
+
+        val user = sm.getUser()
+
+        val userName = when (user) {
+            is Alumne -> user.nom.substringBefore(" ")
+            is Professor -> user.nom.substringBefore(" ")
+            else -> "Usuari"
+        }
+
+        titleTextView.text = "Hola, ${userName}!"
+
+        editButton.setOnClickListener {
+            startActivity(Intent(requireContext(), EditProfileActivity::class.java))
+        }
+
+        logoffButton.setOnClickListener {
+            logOff()
         }
     }
 
-    private fun showAlumneContent(v: View) {
-        // p.ej.: v.findViewById<TextView>(R.id.title).text = "Tu Horario"
-    }
-
-    private fun showProfesorContent(v: View) {
-        // p.ej.: v.findViewById<TextView>(R.id.title).text = "Tus Asignaturas"
+    private fun logOff() {
+        sm.clearSession()
+        startActivity(Intent(requireContext(), StartActivity::class.java))
+        requireActivity().finish()
     }
 }

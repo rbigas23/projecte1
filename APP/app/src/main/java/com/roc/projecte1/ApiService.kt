@@ -1,7 +1,10 @@
 package com.roc.projecte1
 
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService {
@@ -9,8 +12,11 @@ interface ApiService {
 
     // Endpoints GET
 
-//    @GET("/usuaris/{id}")
-//    fun getUser(@Path("id") id: Int): Call<Alumne>
+    @GET("/alumnes/{id}")
+    fun getAlumne(@Path("id") alumneId: Int): Call<Alumne>
+
+    @GET("/professors/{id}")
+    fun getProfessor(@Path("id") professorId: Int): Call<Professor>
 
     @GET("/usuaris/{email}")
     fun getLogin(@Path("email") email: String): Call<LoginResponse>
@@ -18,37 +24,34 @@ interface ApiService {
     @GET("usuaris/classes/{id}")
     fun getClassesForUser(@Path("id") idUsuari: Int): Call<List<Classes>>
 
-//    @GET("/producte/{id}")
-//    fun getProduct(@Path("id") productId: Int): Call<Product>
-//
-//    @GET("/productes/")
-//    fun getAllProducts(): Call<List<Product>>
-//
-//    @GET("/productes/{id}")
-//    fun getProducts(@Path("id") sellerId: Int): Call<List<Product>>
+    @GET("usuaris/assistencies/{id_usuari}")
+    fun getAssistenciesForUser(@Path("id_usuari") userId: Int): Call<List<Assistencia>>
+
+    @GET("usuaris/assistencies_home/{id_usuari}")
+    fun getAssistencies7DaysForUser(@Path("id_usuari") userId: Int): Call<List<Assistencia>>
 
 
-//    // Enpoints POST
-//
-//    @POST("/nou_usuari/")
-//    fun postUser(@Body user: Alumne): Call<Map<String, Any>>
-//
-//    @POST("/nou_producte/")
-//    fun postProduct(@Body product: NewProduct): Call<Map<String, Any>>
-//
-//
-//    // Endpoints PUT
-//
-//    @PUT("/editar_producte/{id}")
-//    fun putProduct(@Path("id") id: Int, @Body product: Product): Call<Map<String, Any>>
-//
-//    @PUT("/editar_usuari/{id}")
-//    fun putUser(@Path("id") id: Int, @Body user: Alumne): Call<Map<String, Any>>
-//
-//
-//    //Endpoints DELETE
-//
-//    @DELETE("/eliminar_producte/{id}")
-//    fun deleteProduct(@Path("id") id: Int): Call<Map<String, Any>>
+    // Enpoints POST
+
+    @POST("/alumnes/")
+    fun postAlumne(@Body alumne: Alumne): Call<Map<String, Any>>
+
+    @POST("/professors/")
+    fun postProfessor(@Body professor: Professor): Call<Map<String, Any>>
+
+
+    // Endpoints PUT
+
+    @PUT("alumnes/{id_alumne}")
+    fun updateAlumne(
+        @Path("id_alumne") idAlumne: Int,
+        @Body alumneUpdate: UserUpdateDto
+    ): Call<UserUpdateDto>
+
+    @PUT("professors/{id_professor}")
+    fun updateProfessor(
+        @Path("id_professor") idProfessor: Int,
+        @Body professorData: UserUpdateDto
+    ): Call<UserUpdateDto>
 
 }
