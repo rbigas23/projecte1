@@ -22,19 +22,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val greetingText: TextView = view.findViewById(R.id.greeting_text)
         val classesRecyclerView: RecyclerView = view.findViewById(R.id.classes_recycler_view)
-        val assistsRecyclerView: RecyclerView = view.findViewById(R.id.assists_recycler_view)
+        val assistsRecyclerView: RecyclerView = view.findViewById(R.id.home_assists_recycler_view)
 
         val user = sm.getUser()
 
         val userName = when (user) {
-            is Alumne -> user.nom
-            is Professor -> user.nom
+            is Alumne -> user.nom.substringBefore(" ")
+            is Professor -> user.nom.substringBefore(" ")
             else -> "Usuari"
         }
 
         val userId = when (user) {
-            is Alumne -> user.idAlumne
-            is Professor -> user.idProfessor
+            is Alumne -> user.idAlumne ?: -1
+            is Professor -> user.idProfessor ?: -1
             else -> -1
         }
 
@@ -74,13 +74,41 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
             })
 
+        apiService.getAssistencies7DaysForUser(userId)
+            .enqueue(object : Callback<List<Assistencia>> {
+                override fun onResponse(call: Call<List<Assistencia>>, resp: Response<List<Assistencia>>) {
+                    if (resp.isSuccessful) {
+                        val assistsData = resp.body().orEmpty()
+                        Log.d("ASSISTENCIES_HOME", "Data: $assistsData")
+                        setupRecyclerView(assistsRecyclerView, assistsData)
+                    } else {
+                        Log.e("ASSISTENCIES_HOME", "HTTP Error: ${resp.code()}, ${resp.errorBody()?.string()}")
+                        Toast.makeText(context, "Error HTTP ${resp.code()}", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
 
-//        setupRecyclerView(assistsRecyclerView, assistsData)
+                override fun onFailure(call: Call<List<Assistencia>>, t: Throwable) {
+                    Toast.makeText(context, "Error de xarxa", Toast.LENGTH_SHORT).show()
+                }
+            })
+
     }
 
 
-    private fun setupRecyclerView(recyclerView: RecyclerView, data: List<Classes>) {
+    private fun setupRecyclerView(recyclerView: RecyclerView, data: List<Any>) {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = ClassesAdapter(data)
+        when {
+            data.isNotEmpty() && data.first() is Classes -> {
+                recyclerView.adapter = ClassesAdapter(data as List<Classes>)
+            }
+            data.isNotEmpty() && data.first() is Assistencia -> {
+                recyclerView.adapter = AssistenciesAdapter(data as List<Assistencia>)
+            }
+            else -> {
+                recyclerView.adapter = null
+            }
+        }
     }
+
 }

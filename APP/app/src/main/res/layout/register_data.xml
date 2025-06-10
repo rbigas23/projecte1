@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="0dp"
+    android:background="@color/background_color"
+    android:paddingHorizontal="20dp"
+    tools:context=".MainActivity"
+    tools:viewBindingIgnore="false">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:paddingHorizontal="5dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/register_data_submit_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView1"
+            style="@style/inner_form_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:gravity="center"
+            android:text="Nom" />
+
+        <EditText
+            android:id="@+id/register_data_name"
+            style="@style/inner_form_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/form_field"
+            android:hint="Nom"
+            android:paddingHorizontal="40dp"
+            android:paddingVertical="15dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/textView3"
+            style="@style/inner_form_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="2dp"
+            android:text="Email" />
+
+        <EditText
+            android:id="@+id/register_data_email"
+            style="@style/inner_form_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/form_field"
+            android:hint="Email"
+            android:paddingHorizontal="40dp"
+            android:paddingVertical="15dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/textView4"
+            style="@style/inner_form_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="2dp"
+            android:text="Contrasenya" />
+
+        <EditText
+            android:id="@+id/register_data_password"
+            style="@style/inner_form_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/form_field"
+            android:hint="Contrasenya"
+            android:inputType="textPassword"
+            android:paddingHorizontal="40dp"
+            android:paddingVertical="15dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/textView5"
+            style="@style/inner_form_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="2dp"
+            android:text="Confirmar contrasenya" />
+
+        <EditText
+            android:id="@+id/register_data_password_confirmation"
+            style="@style/inner_form_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/form_field"
+            android:hint="Confirmar contrasenya"
+            android:inputType="textPassword"
+            android:paddingHorizontal="40dp"
+            android:paddingVertical="15dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/textView6"
+            style="@style/inner_form_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="2dp"
+            android:text="Data naixement" />
+
+        <EditText
+            android:id="@+id/register_data_naixement"
+            style="@style/inner_form_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="@color/green"
+            android:clickable="true"
+            android:gravity="center"
+            android:focusable="false"
+            android:hint="SELECCIONAR DATA NAIXEMENT"
+            android:paddingHorizontal="40dp"
+            android:paddingVertical="15dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/register_data_submit_button"
+        style="@style/inner_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:paddingVertical="10dp"
+        android:text="REGISTRAR-SE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

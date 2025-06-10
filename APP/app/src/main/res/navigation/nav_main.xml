@@ -10,7 +10,7 @@
 
     <fragment
         android:id="@+id/assistFragment"
-        android:name="com.roc.projecte1.AssistFragment"
+        android:name="com.roc.projecte1.AssistenciesFragment"
         android:label="Assist" />
 
     <fragment
