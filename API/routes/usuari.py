@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from typing import List
 from models import Alumne, Professor
 from database import get_db
-from schemas import LoginResponse, ClassesOut
-from crud import get_classes_for_user
+from schemas import LoginResponse, ClassesOut, AssistenciaOut, AssistenciaBase
+from crud import get_classes_for_user, get_asistencies_by_user_id, get_last_7_days_asistencies_by_user_id, delete_assistencia
 
 router = APIRouter(prefix="/usuaris", tags=["usuaris"])
 
@@ -36,3 +36,17 @@ def read_classes_for_user(id_usuari: int, db: Session = Depends(get_db)):
     if not classes:
         return []
     return classes
+
+@router.get("/assistencies/{id_usuari}", response_model=List[AssistenciaOut])
+def read_assistencias(id_usuari: int, db: Session = Depends(get_db)):
+    asistencias = get_asistencies_by_user_id(db, id_usuari)
+    if not asistencias:
+        raise HTTPException(status_code=404, detail="No s'han trobat assistencies.")
+    return asistencias
+
+@router.get("/assistencies_home/{id_usuari}", response_model=List[AssistenciaOut])
+def read_assistencias(id_usuari: int, db: Session = Depends(get_db)):
+    asistencias = get_last_7_days_asistencies_by_user_id(db, id_usuari)
+    if not asistencias:
+        raise HTTPException(status_code=404, detail="No s'han trobat assistencies..")
+    return asistencias

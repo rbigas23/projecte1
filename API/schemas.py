@@ -26,10 +26,10 @@ class Grup(BaseModel):
 class AlumneBase(BaseModel):
     nom: str
     email: str
-    data_naixement: Optional[date] = None
+    data_naixement: date
     data_matriculacio: Optional[date] = None
     id_grup: Optional[int] = None
-    id_targeta: int
+    id_targeta: Optional[int] = None
 
     class Config:
         orm_mode = True
@@ -68,8 +68,8 @@ class AlumneGet(BaseModel):
 class ProfessorBase(BaseModel):
     nom: str
     email: str
-    data_naixement: Optional[date] = None
-    id_targeta: int
+    data_naixement: date
+    id_targeta: Optional[int] = None
 
     class Config:
         orm_mode = True
@@ -122,8 +122,10 @@ class AssistenciaCreate(AssistenciaBase):
 class AssistenciaUpdate(BaseModel):
     tipus_assistencia: Optional[str] = None
 
-class AssistenciaOut(AssistenciaBase):
-    id_assistencia: int
-
+class AssistenciaOut(BaseModel):
+    data: date
+    tipus_assistencia: str
+    uf: str
+    
     class Config:
         orm_mode = True

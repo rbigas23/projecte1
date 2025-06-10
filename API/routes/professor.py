@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List
-
 from database import get_db
 from schemas import ProfessorCreate, ProfessorUpdate, ProfessorOut, ProfessorGet
-from crud import create_professor, read_professor, update_professor
+from crud import create_professor, read_professor, update_professor, delete_professor
+
 
 router = APIRouter(prefix="/professors", tags=["professors"])
 
@@ -19,10 +18,6 @@ def get_professor_route(id_professor: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=f"El professor amb id {id_professor} no existeix.")
     return professor
 
-# @router.get("/", response_model=List[ProfessorOut])
-# def get_all_professors_route(db: Session = Depends(get_db)):
-#     return get_all_professors(db)
-
 @router.put("/{id_professor}", response_model=ProfessorOut)
 def update_professor_route(id_professor: int, professor: ProfessorUpdate, db: Session = Depends(get_db)):
     data = professor.model_dump(exclude_unset=True)
@@ -30,3 +25,10 @@ def update_professor_route(id_professor: int, professor: ProfessorUpdate, db: Se
     if not updated_professor:
         raise HTTPException(status_code=404, detail=f"El professor amb id {id_professor} no existeix.")
     return updated_professor
+
+@router.delete("/{id_professor}", response_model=ProfessorGet)
+def delete_professor_route(id_professor: int, db: Session = Depends(get_db)):
+    professor = delete_professor(db, id_professor)
+    if not professor:
+        raise HTTPException(status_code=404, detail=f"El professor amb id {id_professor} no existeix.")
+    return professor

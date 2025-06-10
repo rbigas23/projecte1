@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from models import Alumne, Professor, Assistencia, Uf, Modul
 from schemas import *
@@ -34,6 +35,14 @@ def update_alumne(db: Session, alumne_id: int, **kwargs):
     db.refresh(alumne)
     return alumne
 
+def delete_alumne(db: Session, alumne_id: int):
+    db_alumne = db.query(Alumne).filter(Alumne.id_alumne == alumne_id).first()
+    if not db_alumne:
+        return None
+    db.delete(db_alumne)
+    db.commit()
+    return db_alumne
+
 
 # CRUD Professor
 
@@ -63,6 +72,14 @@ def update_professor(db: Session, professor_id: int, **kwargs):
     db.commit()
     db.refresh(professor)
     return professor
+
+def delete_professor(db: Session, professor_id: int):
+    db_professor = db.query(Professor).filter(Professor.id_professor == professor_id).first()
+    if not db_professor:
+        return None
+    db.delete(db_professor)
+    db.commit()
+    return db_professor
 
 
 # CRUD Assistencia
@@ -102,8 +119,85 @@ def delete_assistencia(db: Session, assistencia_id: int):
     db.commit()
     return db_assistencia
 
+def get_asistencies_by_user_id(db: Session, id_usuari: int):
 
-# CRUD Classes
+    professor = db.query(Professor).filter_by(id_usuari=id_usuari).first()
+    if professor:
+        return (
+            db.query(
+                Assistencia.data,
+                Assistencia.tipus_assistencia,
+                Uf.codi_uf.label("uf")
+            )
+            .join(Uf, Assistencia.id_uf == Uf.id_uf)
+            .join(Modul, Uf.id_modul == Modul.id_modul)
+            .filter(
+                Assistencia.id_professor == professor.id_professor,
+            )
+            .order_by(Assistencia.data)
+            .all()
+        )
+
+    alumne = db.query(Alumne).filter_by(id_usuari=id_usuari).first()
+    if alumne:
+        return (
+            db.query(
+                Assistencia.data,
+                Assistencia.tipus_assistencia,
+                Uf.codi_uf.label("uf")
+            )
+            .join(Uf, Assistencia.id_uf == Uf.id_uf)
+            .filter(
+                Assistencia.id_alumne == alumne.id_alumne,
+            )
+            .order_by(Assistencia.data)
+            .all()
+        )
+
+    return None
+
+def get_last_7_days_asistencies_by_user_id(db: Session, id_usuari: int):
+    seven_days_ago = datetime.now() - timedelta(days=7)
+
+    professor = db.query(Professor).filter_by(id_usuari=id_usuari).first()
+    if professor:
+        return (
+            db.query(
+                Assistencia.data,
+                Assistencia.tipus_assistencia,
+                Uf.codi_uf.label("uf")
+            )
+            .join(Uf, Assistencia.id_uf == Uf.id_uf)
+            .join(Modul, Uf.id_modul == Modul.id_modul)
+            .filter(
+                Assistencia.id_professor == professor.id_professor,
+                Assistencia.data >= seven_days_ago
+            )
+            .order_by(Assistencia.data)
+            .all()
+        )
+
+    alumne = db.query(Alumne).filter_by(id_usuari=id_usuari).first()
+    if alumne:
+        return (
+            db.query(
+                Assistencia.data,
+                Assistencia.tipus_assistencia,
+                Uf.codi_uf.label("uf")
+            )
+            .join(Uf, Assistencia.id_uf == Uf.id_uf)
+            .filter(
+                Assistencia.id_alumne == alumne.id_alumne,
+                Assistencia.data >= seven_days_ago
+            )
+            .order_by(Assistencia.data)
+            .all()
+        )
+
+    return None
+
+
+# GET Classes
 
 def get_classes_for_user(db: Session, id_usuari: int):
 
